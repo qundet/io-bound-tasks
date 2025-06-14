@@ -2,10 +2,9 @@ package main
 
 import (
 	"fmt"
+	h "io-bound-tasks/handlers"
 	"net/http"
-    h "io-bound-tasks/handlers"
 )
-
 
 func main() {
 	http.HandleFunc("/tasks", func(w http.ResponseWriter, r *http.Request) {

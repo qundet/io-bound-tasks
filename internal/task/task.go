@@ -15,7 +15,7 @@ const (
 )
 
 type Task struct {
-	ID          uuid.UUID     `json:"id"`
+	ID          uuid.UUID  `json:"id"`
 	Status      TaskStatus `json:"status"`
 	CreatedAt   time.Time  `json:"created_at"`
 	CompletedAt time.Time  `json:"completed_at"`
@@ -27,8 +27,8 @@ func (t *Task) Duration() float64 {
 	var endTime time.Time
 	if t.CompletedAt.IsZero() { // rework logic //////////////////////////////////////////////////////////////////////////////////////////
 		endTime = time.Now()
-		t.CompletedAt = endTime;
-	} else {			
+		t.CompletedAt = endTime
+	} else {
 		endTime = t.CompletedAt
 	}
 

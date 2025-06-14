@@ -1,15 +1,15 @@
 package handlers
 
 import (
+	"encoding/json"
 	"fmt"
-	"sync"
-	"time"
+	tm "io-bound-tasks/internal/task"
 	"math/rand"
 	"net/http"
-	"encoding/json"
-    "github.com/google/uuid"
-	tm "io-bound-tasks/internal/task"
+	"sync"
+	"time"
 
+	"github.com/google/uuid"
 )
 
 var (
@@ -21,16 +21,15 @@ func simulateTask() {
 
 	rand.Seed(time.Now().UnixNano())
 
-    min := 3 * time.Minute
-    max := 5 * time.Minute
+	min := 3 * time.Minute
+	max := 5 * time.Minute
 
-    delta := time.Duration(rand.Int63n(int64(max - min))) + min
+	delta := time.Duration(rand.Int63n(int64(max-min))) + min
 
-    fmt.Println("Do some smart stuff :)...")
-    time.Sleep(delta)
-    fmt.Println("Done")
+	fmt.Println("Do some smart stuff :)...")
+	time.Sleep(delta)
+	fmt.Println("Done")
 }
-
 
 func CreateTask(w http.ResponseWriter, r *http.Request) {
 	task := &tm.Task{
@@ -80,11 +79,11 @@ func TaskHandler(w http.ResponseWriter, r *http.Request) {
 func getTaskStatus(w http.ResponseWriter, r *http.Request) {
 	taskIDStr := r.URL.Path[len("/tasks/"):]
 
-    taskID, err := uuid.Parse(taskIDStr)
-    if err != nil {
-        http.Error(w, "Invalid UUID format", http.StatusBadRequest)
-        return
-    }
+	taskID, err := uuid.Parse(taskIDStr)
+	if err != nil {
+		http.Error(w, "Invalid UUID format", http.StatusBadRequest)
+		return
+	}
 	tasksMutex.Lock()
 	task, exists := tasks[taskID]
 	tasksMutex.Unlock()
@@ -101,12 +100,12 @@ func getTaskStatus(w http.ResponseWriter, r *http.Request) {
 func deleteTask(w http.ResponseWriter, r *http.Request) {
 	taskIDStr := r.URL.Path[len("/tasks/"):]
 
-    taskID, err := uuid.Parse(taskIDStr)
-    if err != nil {
-        http.Error(w, "Invalid UUID format", http.StatusBadRequest)
-        return
-    }
-    
+	taskID, err := uuid.Parse(taskIDStr)
+	if err != nil {
+		http.Error(w, "Invalid UUID format", http.StatusBadRequest)
+		return
+	}
+
 	tasksMutex.Lock()
 	_, exists := tasks[taskID]
 	if exists {
